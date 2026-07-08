@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact LostFy Support">
+    <title>Contact - LostFy</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" style="min-height:45vh;">
+        <div class="container text-center">
+            <h1 class="fade-in">
+                Contact <span class="text-gradient">LostFy</span>
+            </h1>
+
+            <p class="fade-in" style="margin-top:20px;">
+                Need help? Have a question or suggestion?
+                We'd love to hear from you.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section">
+        <div class="container">
+
+            <div style="display:grid;
+                        grid-template-columns:1fr 1fr;
+                        gap:40px;
+                        align-items:start;">
+
+                <!-- Left -->
+                <div class="glass animate-on-scroll" style="padding:35px;">
+
+                    <h2>Get in Touch</h2>
+
+                    <p style="margin:20px 0;">
+                        Our support team is here to help you recover your lost belongings.
+                    </p>
+
+                    <div style="margin-top:25px;">
+
+                        <p><strong>📧 Email</strong></p>
+                        <p>support@lostfy.com</p>
+
+                        <br>
+
+                        <p><strong>📞 Phone</strong></p>
+                        <p>+91 98765 43210</p>
+
+                        <br>
+
+                        <p><strong>📍 Address</strong></p>
+                        <p>
+                            SIRT College<br>
+                            Bhopal, Madhya Pradesh<br>
+                            India
+                        </p>
+
+                        <br>
+
+                        <p><strong>🕒 Support Hours</strong></p>
+                        <p>
+                            Monday - Saturday<br>
+                            9:00 AM – 6:00 PM
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Right -->
+                <div class="card animate-on-scroll" style="padding:35px;">
+
+                    <h2>Send Message</h2>
+
+                    <form>
+
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter your name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                placeholder="Enter your email"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Subject">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Message</label>
+
+                            <textarea
+                                rows="6"
+                                class="form-control"
+                                placeholder="Write your message..."
+                                required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary" style="width:100%;">
+                            Send Message
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Map -->
+    <section class="section">
+
+        <div class="container">
+
+            <h2 class="text-center">
+                Our Location
+            </h2>
+
+            <div class="card" style="padding:0;margin-top:30px;overflow:hidden;">
+
+                <iframe
+                    src="https://www.google.com/maps?q=Bhopal,+Madhya+Pradesh&output=embed"
+                    width="100%"
+                    height="400"
+                    style="border:0;"
+                    loading="lazy">
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="section text-center" style="background:var(--bg-card);">
+
+        <div class="container">
+
+            <h3>LostFy</h3>
+
+            <p>
+                AI Powered Lost & Found Platform
+            </p>
+
+            <div style="margin:20px 0;">
+
+                <a href="../index.html">Home</a> |
+                <a href="about.html">About</a> |
+                <a href="contact.html">Contact</a>
+
+            </div>
+
+            <p style="opacity:.7;">
+                © 2026 LostFy. All Rights Reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script src="../js/app.js"></script>
+
+</body>
+
+</html>
