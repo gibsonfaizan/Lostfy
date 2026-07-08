@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LostFy — AI-powered Lost & Found platform. Report, match, and reclaim your lost belongings with smart AI matching and verified ownership.">
+  <title>LostFy — AI-Powered Lost & Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Animated Blob Background -->
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <h1>Lost Something?<br><span class="text-gradient">AI Will Find It.</span></h1>
+        <p>LostFy uses cutting-edge AI — CLIP image matching, YOLO object detection, and OCR text extraction — to reunite you with your lost belongings. Report, match, and verify ownership in minutes.</p>
+        <div class="hero-actions">
+          <a href="pages/report-lost.html" class="btn btn-primary">📢 Report Lost Item</a>
+          <a href="pages/report-found.html" class="btn btn-secondary">🔍 Report Found Item</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual"></div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="section" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card glass animate-on-scroll">
+          <div class="stat-icon">📦</div>
+          <div class="stat-number" id="statLost">2,847</div>
+          <div class="stat-label">Items Reported</div>
+        </div>
+        <div class="stat-card glass animate-on-scroll">
+          <div class="stat-icon">🤝</div>
+          <div class="stat-number" id="statReturned">1,923</div>
+          <div class="stat-label">Items Returned</div>
+        </div>
+        <div class="stat-card glass animate-on-scroll">
+          <div class="stat-icon">🧠</div>
+          <div class="stat-number" id="statMatches">4,512</div>
+          <div class="stat-label">AI Matches Made</div>
+        </div>
+        <div class="stat-card glass animate-on-scroll">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-number" id="statTrust">98.2%</div>
+          <div class="stat-label">Trust Score</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" id="howItWorks" style="background: var(--bg-card);">
+    <div class="container text-center">
+      <h2 class="animate-on-scroll">How LostFy Works</h2>
+      <p class="animate-on-scroll" style="max-width:600px;margin:12px auto 48px;">Three simple steps powered by advanced AI to get your belongings back.</p>
+      <div class="stats-grid">
+        <div class="card animate-on-scroll" style="padding:32px;">
+          <div style="font-size:2.5rem;margin-bottom:16px;">📸</div>
+          <h3>1. Report & Upload</h3>
+          <p style="margin-top:8px;">Upload photos and describe your lost or found item. Our AI auto-tags objects, extracts text, and blurs sensitive information.</p>
+        </div>
+        <div class="card animate-on-scroll" style="padding:32px;">
+          <div style="font-size:2.5rem;margin-bottom:16px;">🧠</div>
+          <h3>2. AI Matching</h3>
+          <p style="margin-top:8px;">CLIP compares visual features, YOLO identifies object types, and FAISS ranks potential matches by location, time, and similarity.</p>
+        </div>
+        <div class="card animate-on-scroll" style="padding:32px;">
+          <div style="font-size:2.5rem;margin-bottom:16px;">✅</div>
+          <h3>3. Verify & Reclaim</h3>
+          <p style="margin-top:8px;">Answer verification questions, achieve a trust score, and schedule a secure handover with QR/OTP confirmation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search & Browse -->
+  <section class="section" id="browse">
+    <div class="container">
+      <h2 class="text-center animate-on-scroll">Browse Recent Reports</h2>
+      <p class="text-center animate-on-scroll" style="max-width:500px;margin:8px auto 32px;">Find recently reported lost and found items near you.</p>
+
+      <!-- Search Bar -->
+      <div class="search-bar animate-on-scroll" style="margin-bottom:24px;">
+        <div class="search-wrapper">
+          <input type="text" class="form-control" id="searchInput" placeholder="Search items by name, category, or location...">
+        </div>
+        <button class="btn btn-primary" id="searchBtn">Search</button>
+      </div>
+
+      <!-- Filter Chips -->
+      <div class="filter-bar glass animate-on-scroll">
+        <span class="filter-chip active" data-filter="all">All</span>
+        <span class="filter-chip" data-filter="lost">🔴 Lost</span>
+        <span class="filter-chip" data-filter="found">🟢 Found</span>
+        <span class="filter-chip" data-filter="electronics">📱 Electronics</span>
+        <span class="filter-chip" data-filter="documents">📄 Documents</span>
+        <span class="filter-chip" data-filter="wallets_bags">👜 Wallets & Bags</span>
+        <span class="filter-chip" data-filter="keys">🔑 Keys</span>
+        <span class="filter-chip" data-filter="accessories">⌚ Accessories</span>
+      </div>
+
+      <!-- Items Grid -->
+      <div class="items-grid" id="itemsGrid">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section text-center" style="background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; position: relative;">
+    <div class="container" style="position:relative;z-index:2;">
+      <h2 style="color:#fff;" class="animate-on-scroll">Ready to Find What You've Lost?</h2>
+      <p style="color:rgba(255,255,255,0.85);max-width:500px;margin:12px auto 32px;" class="animate-on-scroll">Join thousands of users who trust LostFy's AI matching engine to reunite them with their belongings.</p>
+      <a href="pages/auth.html" class="btn animate-on-scroll" style="background:#fff;color:var(--primary);font-weight:700;">Get Started Free →</a>
+    </div>
+  </section>
+
+  <script src="js/app.js"></script>
+  <script>
+    // ---- Demo Items Data (replaced by API in production) ----
+    const demoItems = [
+      { id: 1, type: 'lost', category: 'electronics', title: 'iPhone 15 Pro Max', description: 'Lost near Central Park metro station. Space Black, has a clear case with stickers.', location_text: 'Central Park, Delhi', image_url: 'https://images.unsplash.com/photo-1696446702183-cbd13d78b261?w=400&h=300&fit=crop', created_at: '2026-07-04T10:30:00', status: 'active' },
+      { id: 2, type: 'found', category: 'wallets_bags', title: 'Brown Leather Wallet', description: 'Found on bench at Connaught Place. Contains cards but no cash. Has initials "R.K."', location_text: 'Connaught Place, Delhi', image_url: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&h=300&fit=crop', created_at: '2026-07-03T14:15:00', status: 'matching' },
+      { id: 3, type: 'lost', category: 'keys', title: 'Car Keys — Hyundai Creta', description: 'Lost somewhere between Sector 62 and Sector 18 Noida. Has a red keychain.', location_text: 'Sector 62, Noida', image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop', created_at: '2026-07-02T09:00:00', status: 'active' },
+      { id: 4, type: 'found', category: 'documents', title: 'Passport — Indian', description: 'Found near IGI Airport Terminal 3 parking. Please verify identity to claim.', location_text: 'IGI Airport T3, Delhi', image_url: 'https://images.unsplash.com/photo-1544991875-5dc1b05f607d?w=400&h=300&fit=crop', created_at: '2026-07-01T17:45:00', status: 'claimed' },
+      { id: 5, type: 'lost', category: 'electronics', title: 'MacBook Air M2', description: 'Left at Starbucks Cyber Hub. Silver, 13-inch, has LostFy sticker on lid.', location_text: 'Cyber Hub, Gurugram', image_url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop', created_at: '2026-06-30T11:20:00', status: 'active' },
+      { id: 6, type: 'found', category: 'accessories', title: 'Ray-Ban Sunglasses', description: 'Found at India Gate lawns. Black aviator style, slight scratch on left lens.', location_text: 'India Gate, Delhi', image_url: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=300&fit=crop', created_at: '2026-06-29T16:00:00', status: 'active' },
+    ];
+
+    const statusMap = { active: 'badge-active', matching: 'badge-matching', claimed: 'badge-claimed', closed: 'badge-closed' };
+
+    function renderItems(items) {
+      const grid = document.getElementById('itemsGrid');
+      grid.innerHTML = items.map(item => `
+        <div class="card item-card fade-in" data-type="${item.type}" data-category="${item.category}">
+          <div class="item-card-img">
+            <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+            <span class="badge ${item.type === 'lost' ? 'badge-active' : 'badge-claimed'}" style="position:absolute;top:12px;left:12px;">${item.type === 'lost' ? '🔴 Lost' : '🟢 Found'}</span>
+          </div>
+          <div class="item-card-body">
+            <h3>${item.title}</h3>
+            <p>${item.description}</p>
+            <div class="item-card-meta">
+              <span>📍 ${item.location_text}</span>
+              <span class="badge ${statusMap[item.status]}">${item.status}</span>
+            </div>
+            <div class="item-card-meta" style="margin-top:8px;">
+              <span>🕐 ${timeAgo(item.created_at)}</span>
+              <a href="pages/match-results.html?id=${item.id}" class="btn btn-sm btn-primary">View Matches</a>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Initial render
+    renderItems(demoItems);
+
+    // Filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const filter = chip.dataset.filter;
+        if (filter === 'all') return renderItems(demoItems);
+        if (filter === 'lost' || filter === 'found') return renderItems(demoItems.filter(i => i.type === filter));
+        renderItems(demoItems.filter(i => i.category === filter));
+      });
+    });
+
+    // Search
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      if (!q) return renderItems(demoItems);
+      renderItems(demoItems.filter(i =>
+        i.title.toLowerCase().includes(q) ||
+        i.description.toLowerCase().includes(q) ||
+        i.location_text.toLowerCase().includes(q)
+      ));
+    });
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') document.getElementById('searchBtn').click();
+    });
+  </script>
+</body>
+</html>

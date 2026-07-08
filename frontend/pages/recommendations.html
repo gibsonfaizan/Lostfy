@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View nearby lost and found item recommendations powered by LostFy AI.">
+    <title>Nearby Recommendations — LostFy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+        <div class="container">
+            <h2 class="fade-in">📍 Nearby Recommendations</h2>
+            <p class="fade-in" style="margin-bottom:24px;">AI-powered matches based on your location, time proximity,
+                and item similarity.</p>
+
+            <!-- Location Controls -->
+            <div class="glass fade-in"
+                style="padding:20px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:16px;align-items:end;">
+                <div class="form-group" style="margin:0;flex:1;min-width:200px;">
+                    <label for="recLat">Latitude</label>
+                    <input type="number" step="any" id="recLat" class="form-control" placeholder="28.6139">
+                </div>
+                <div class="form-group" style="margin:0;flex:1;min-width:200px;">
+                    <label for="recLng">Longitude</label>
+                    <input type="number" step="any" id="recLng" class="form-control" placeholder="77.2090">
+                </div>
+                <div class="form-group" style="margin:0;min-width:140px;">
+                    <label for="recRadius">Radius (km)</label>
+                    <select id="recRadius" class="form-control">
+                        <option value="1">1 km</option>
+                        <option value="5" selected>5 km</option>
+                        <option value="10">10 km</option>
+                        <option value="25">25 km</option>
+                        <option value="50">50 km</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="getMyLocation()">📍 Use My Location</button>
+                <button class="btn btn-accent" onclick="loadRecommendations()">Search Nearby</button>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-bar glass fade-in" style="margin-bottom:24px;">
+                <span class="filter-chip active" data-filter="all">All</span>
+                <span class="filter-chip" data-filter="electronics">📱 Electronics</span>
+                <span class="filter-chip" data-filter="documents">📄 Documents</span>
+                <span class="filter-chip" data-filter="wallets_bags">👜 Wallets</span>
+                <span class="filter-chip" data-filter="keys">🔑 Keys</span>
+                <span class="filter-chip" data-filter="accessories">⌚ Accessories</span>
+            </div>
+
+            <!-- Map -->
+            <div class="map-container fade-in" style="margin-bottom:32px;" id="nearbyMap">
+                <div class="map-overlay"><span>📍 Enter your location to see nearby items on the map</span></div>
+            </div>
+
+            <!-- Results Grid -->
+            <div class="items-grid" id="recGrid"></div>
+        </div>
+    </section>
+
+    <script src="../js/app.js"></script>
+    <script>
+        const nearbyDemoData = [
+            { id: 10, type: 'found', category: 'electronics', title: 'Samsung Galaxy Buds', description: 'Found white Galaxy Buds case near Hauz Khas metro. Slightly scratched.', location_text: 'Hauz Khas Metro, Delhi', distance: '0.8 km', score: 87, image_url: 'https://images.unsplash.com/photo-1590658268037-6bf12f032f55?w=400&h=300&fit=crop', created_at: '2026-07-04T08:00:00' },
+            { id: 11, type: 'lost', category: 'documents', title: 'Aadhaar Card', description: 'Lost near SDA market. Name partially visible on front.', location_text: 'SDA Market, Delhi', distance: '1.2 km', score: 72, image_url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop', created_at: '2026-07-03T12:00:00' },
+            { id: 12, type: 'found', category: 'wallets_bags', title: 'Black Backpack — Nike', description: 'Found near IIT Delhi main gate. Has a laptop sleeve and water bottle.', location_text: 'IIT Delhi, Delhi', distance: '2.1 km', score: 64, image_url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop', created_at: '2026-07-02T15:30:00' },
+            { id: 13, type: 'lost', category: 'keys', title: 'House Keys with Blue Keychain', description: 'Lost somewhere around Green Park market area. 3 keys on a blue ring.', location_text: 'Green Park, Delhi', distance: '3.4 km', score: 58, image_url: 'https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400&h=300&fit=crop', created_at: '2026-07-01T09:15:00' },
+        ];
+
+        function renderNearbyItems(items) {
+            document.getElementById('recGrid').innerHTML = items.map(item => `
+        <div class="card item-card fade-in" data-category="${item.category}">
+          <div class="item-card-img">
+            <img src="${item.image_url}" alt="${item.title}" loading="lazy">
+            <span class="badge ${item.type === 'lost' ? 'badge-active' : 'badge-claimed'}" style="position:absolute;top:12px;left:12px;">${item.type === 'lost' ? '🔴 Lost' : '🟢 Found'}</span>
+            <span class="badge badge-matching" style="position:absolute;top:12px;right:12px;">📍 ${item.distance}</span>
+          </div>
+          <div class="item-card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <h3 style="margin:0;">${item.title}</h3>
+              <span style="font-weight:700;color:var(--primary);">${item.score}%</span>
+            </div>
+            <p>${item.description}</p>
+            <div class="item-card-meta">
+              <span>📍 ${item.location_text}</span>
+              <span>🕐 ${timeAgo(item.created_at)}</span>
+            </div>
+            <a href="match-results.html?id=${item.id}" class="btn btn-sm btn-primary" style="margin-top:12px;">View Match →</a>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        function loadRecommendations() {
+            const lat = document.getElementById('recLat').value;
+            const lng = document.getElementById('recLng').value;
+            if (lat && lng) {
+                document.getElementById('nearbyMap').innerHTML = `<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.03},${lat - 0.03},${parseFloat(lng) + 0.03},${parseFloat(lat) + 0.03}&layer=mapnik&marker=${lat},${lng}" allowfullscreen></iframe>`;
+            }
+            renderNearbyItems(nearbyDemoData);
+            Toast.show('Found ' + nearbyDemoData.length + ' nearby items!', 'info');
+        }
+
+        function getMyLocation() {
+            if (!navigator.geolocation) { Toast.show('Geolocation not supported', 'warning'); return; }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    document.getElementById('recLat').value = pos.coords.latitude.toFixed(6);
+                    document.getElementById('recLng').value = pos.coords.longitude.toFixed(6);
+                    Toast.show('Location captured!', 'success');
+                    loadRecommendations();
+                },
+                () => Toast.show('Unable to get location', 'error')
+            );
+        }
+
+        // Filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const f = chip.dataset.filter;
+                renderNearbyItems(f === 'all' ? nearbyDemoData : nearbyDemoData.filter(i => i.category === f));
+            });
+        });
+
+        // Load on page load
+        renderNearbyItems(nearbyDemoData);
+    </script>
+</body>
+
+</html>

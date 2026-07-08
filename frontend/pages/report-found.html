@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Report a found item on LostFy. Help reunite lost belongings with their rightful owners.">
+    <title>Report Found Item — LostFy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+        <div class="container" style="max-width:720px;">
+            <div class="glass fade-in" style="padding:40px;">
+                <h2>🔍 Report Found Item</h2>
+                <p style="margin-bottom:32px;">Thank you for being a good citizen! Upload photos and our AI will
+                    automatically search for matching lost reports.</p>
+
+                <form id="foundForm" onsubmit="handleFoundSubmit(event)">
+                    <div class="form-group">
+                        <label for="itemTitle">Item Title *</label>
+                        <input type="text" id="itemTitle" class="form-control"
+                            placeholder="e.g. Brown leather wallet with initials R.K." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemCategory">Category *</label>
+                        <select id="itemCategory" class="form-control" required>
+                            <option value="">Select category</option>
+                            <option value="electronics">📱 Electronics</option>
+                            <option value="documents">📄 Documents</option>
+                            <option value="wallets_bags">👜 Wallets & Bags</option>
+                            <option value="keys">🔑 Keys</option>
+                            <option value="accessories">⌚ Accessories</option>
+                            <option value="others">📦 Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemDesc">Description *</label>
+                        <textarea id="itemDesc" class="form-control"
+                            placeholder="Describe what you found — color, brand, condition, any visible text or markings..."
+                            required></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label>Upload Photos (max 5)</label>
+                        <div class="upload-area">
+                            <div class="upload-icon">📷</div>
+                            <p>Click or drag photos here</p>
+                            <p style="font-size:0.8rem;">Faces & sensitive info will be auto-blurred by AI</p>
+                            <input type="file" id="imageInput" accept="image/*" multiple>
+                        </div>
+                        <div class="upload-preview" id="imagePreview"></div>
+                    </div>
+
+                    <!-- AI Processing Info -->
+                    <div class="glass" style="padding:16px;margin-bottom:20px;border-left:4px solid var(--accent);">
+                        <p style="color:var(--text);font-weight:600;font-size:0.9rem;">🤖 AI Auto-Processing</p>
+                        <p style="font-size:0.85rem;margin-top:4px;">When uploaded, our AI will automatically: detect
+                            objects (YOLO), extract text (OCR), blur faces & sensitive data, and search for matches
+                            (CLIP + FAISS).</p>
+                    </div>
+
+                    <!-- Location -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div class="form-group">
+                            <label for="locLat">Latitude *</label>
+                            <input type="number" step="any" id="locLat" class="form-control" placeholder="28.6139"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="locLng">Longitude *</label>
+                            <input type="number" step="any" id="locLng" class="form-control" placeholder="77.2090"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="locText">Where did you find it?</label>
+                        <input type="text" id="locText" class="form-control"
+                            placeholder="e.g. On a bench at India Gate">
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary" style="margin-bottom:20px;"
+                        onclick="getMyLocation()">📍 Use My Location</button>
+
+                    <!-- Map Preview -->
+                    <div class="map-container" style="height:250px;margin-bottom:24px;" id="mapContainer">
+                        <div class="map-overlay"><span>📍 Map preview — enter coordinates above</span></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateFound">Date & Time Found</label>
+                        <input type="datetime-local" id="dateFound" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-accent btn-block" style="margin-top:16px;">Submit Found Report
+                        →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/app.js"></script>
+    <script>
+        initUploadPreview('imageInput', 'imagePreview');
+
+        function getMyLocation() {
+            if (!navigator.geolocation) { Toast.show('Geolocation not supported', 'warning'); return; }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    document.getElementById('locLat').value = pos.coords.latitude.toFixed(6);
+                    document.getElementById('locLng').value = pos.coords.longitude.toFixed(6);
+                    updateMapPreview();
+                    Toast.show('Location captured!', 'success');
+                },
+                () => Toast.show('Unable to get location', 'error')
+            );
+        }
+
+        ['locLat', 'locLng'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updateMapPreview);
+        });
+
+        function updateMapPreview() {
+            const lat = document.getElementById('locLat').value;
+            const lng = document.getElementById('locLng').value;
+            if (lat && lng) {
+                document.getElementById('mapContainer').innerHTML = `<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01},${lat - 0.01},${parseFloat(lng) + 0.01},${parseFloat(lat) + 0.01}&layer=mapnik&marker=${lat},${lng}" allowfullscreen></iframe>`;
+            }
+        }
+
+        async function handleFoundSubmit(e) {
+            e.preventDefault();
+            Toast.show('Found report submitted! AI is analyzing your upload for matches...', 'success');
+            setTimeout(() => window.location.href = 'dashboard.html', 1500);
+        }
+    </script>
+</body>
+
+</html>

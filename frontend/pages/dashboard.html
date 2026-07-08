@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your LostFy dashboard — track reports, claims, matches, and manage your account.">
+    <title>Dashboard — LostFy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div style="text-align:center;margin-bottom:28px;">
+                <div
+                    style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:#fff;">
+                    👤</div>
+                <h3 id="userName" style="font-size:1rem;">Demo User</h3>
+                <span class="badge badge-active" id="userRole">User</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active" data-section="overview">📊 Overview</a>
+                <a href="#" data-section="myReports">📋 My Reports</a>
+                <a href="#" data-section="myClaims">🎯 My Claims</a>
+                <a href="#" data-section="notifications">🔔 Notifications</a>
+                <a href="#" data-section="settings">⚙️ Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <div id="overviewSection">
+                <h2 class="fade-in">Dashboard Overview</h2>
+                <div class="stats-grid fade-in" style="margin:24px 0;">
+                    <div class="stat-card glass">
+                        <div class="stat-icon">📢</div>
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Lost Reports</div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">🔍</div>
+                        <div class="stat-number">2</div>
+                        <div class="stat-label">Found Reports</div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Active Claims</div>
+                    </div>
+                    <div class="stat-card glass">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Returned</div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card fade-in" style="padding:24px;">
+                    <h3 style="margin-bottom:16px;">Recent Activity</h3>
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <h4>iPhone 15 Pro Max — Match Found</h4>
+                            <p>87% confidence match detected by AI. Review and claim now.</p>
+                            <div class="timeline-date">Jul 4, 2026 — 10:31 AM</div>
+                        </div>
+                        <div class="timeline-item completed">
+                            <h4>Brown Wallet — Claim Verified</h4>
+                            <p>Owner verified via OTP. Meeting scheduled for handover.</p>
+                            <div class="timeline-date">Jul 3, 2026 — 2:45 PM</div>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Car Keys — Pending Match</h4>
+                            <p>AI scanning for nearby matches. 2 potential candidates found.</p>
+                            <div class="timeline-date">Jul 2, 2026 — 9:15 AM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Reports Section -->
+            <div id="myReportsSection" style="display:none;">
+                <h2 class="fade-in">My Reports</h2>
+                <div class="tabs" style="margin-top:20px;">
+                    <button class="tab-btn active" data-tab="lostTab">🔴 Lost Items</button>
+                    <button class="tab-btn" data-tab="foundTab">🟢 Found Items</button>
+                </div>
+                <div class="tab-content active" id="lostTab">
+                    <div class="items-grid" style="margin-top:20px;">
+                        <div class="card" style="padding:20px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <h3>iPhone 15 Pro Max</h3>
+                                <span class="badge badge-matching">Matching</span>
+                            </div>
+                            <p style="margin:8px 0;font-size:0.9rem;">Lost near Central Park. Space Black with clear
+                                case.</p>
+                            <div style="display:flex;gap:8px;margin-top:12px;">
+                                <a href="match-results.html" class="btn btn-sm btn-primary">View Matches</a>
+                                <button class="btn btn-sm btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                        <div class="card" style="padding:20px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <h3>Car Keys — Hyundai Creta</h3>
+                                <span class="badge badge-active">Active</span>
+                            </div>
+                            <p style="margin:8px 0;font-size:0.9rem;">Lost between Sector 62 and 18, Noida. Red
+                                keychain.</p>
+                            <div style="display:flex;gap:8px;margin-top:12px;">
+                                <a href="match-results.html" class="btn btn-sm btn-primary">View Matches</a>
+                                <button class="btn btn-sm btn-secondary">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="foundTab">
+                    <div class="items-grid" style="margin-top:20px;">
+                        <div class="card" style="padding:20px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <h3>Brown Leather Wallet</h3>
+                                <span class="badge badge-claimed">Claimed</span>
+                            </div>
+                            <p style="margin:8px 0;font-size:0.9rem;">Found at Connaught Place. Owner verified.</p>
+                            <div style="display:flex;gap:8px;margin-top:12px;">
+                                <button class="btn btn-sm btn-accent">View Handover</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Claims Section -->
+            <div id="myClaimsSection" style="display:none;">
+                <h2 class="fade-in">My Claims</h2>
+                <div class="card fade-in" style="padding:0;margin-top:20px;overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Status</th>
+                                <th>Confidence</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>iPhone 15 Pro Max</td>
+                                <td><span class="badge badge-matching">Pending</span></td>
+                                <td style="font-weight:700;color:var(--primary);">87%</td>
+                                <td>Jul 4, 2026</td>
+                                <td><a href="verification.html" class="btn btn-sm btn-primary">Verify</a></td>
+                            </tr>
+                            <tr>
+                                <td>Brown Leather Wallet</td>
+                                <td><span class="badge badge-active">Verified</span></td>
+                                <td style="font-weight:700;color:var(--success);">94%</td>
+                                <td>Jul 3, 2026</td>
+                                <td><button class="btn btn-sm btn-accent">Handover</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div id="notificationsSection" style="display:none;">
+                <h2 class="fade-in">Notifications</h2>
+                <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;" id="notifList">
+                    <div class="glass fade-in" style="padding:16px;border-left:4px solid var(--success);">
+                        <div style="display:flex;justify-content:space-between;"><strong>Match Found!</strong><span
+                                style="font-size:0.8rem;color:var(--text-secondary);">2 hours ago</span></div>
+                        <p style="font-size:0.9rem;margin-top:4px;">Your lost iPhone has an 87% match. Review now.</p>
+                    </div>
+                    <div class="glass fade-in" style="padding:16px;border-left:4px solid var(--info);">
+                        <div style="display:flex;justify-content:space-between;"><strong>Claim Approved</strong><span
+                                style="font-size:0.8rem;color:var(--text-secondary);">1 day ago</span></div>
+                        <p style="font-size:0.9rem;margin-top:4px;">Your claim for the brown wallet was approved.
+                            Schedule meeting.</p>
+                    </div>
+                    <div class="glass fade-in" style="padding:16px;border-left:4px solid var(--warning);">
+                        <div style="display:flex;justify-content:space-between;"><strong>New Nearby Item</strong><span
+                                style="font-size:0.8rem;color:var(--text-secondary);">3 days ago</span></div>
+                        <p style="font-size:0.9rem;margin-top:4px;">A found item matching your description was reported
+                            2 km from you.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settingsSection" style="display:none;">
+                <h2 class="fade-in">Account Settings</h2>
+                <div class="card fade-in" style="padding:28px;margin-top:20px;max-width:500px;">
+                    <form>
+                        <div class="form-group">
+                            <label for="settName">Full Name</label>
+                            <input type="text" id="settName" class="form-control" value="Demo User">
+                        </div>
+                        <div class="form-group">
+                            <label for="settEmail">Email</label>
+                            <input type="email" id="settEmail" class="form-control" value="demo@lostfy.io" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="settPassword">New Password</label>
+                            <input type="password" id="settPassword" class="form-control"
+                                placeholder="Leave blank to keep current">
+                        </div>
+                        <button type="button" class="btn btn-primary"
+                            onclick="Toast.show('Settings saved!', 'success')">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar-nav a').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                const section = link.dataset.section;
+                ['overview', 'myReports', 'myClaims', 'notifications', 'settings'].forEach(s => {
+                    const el = document.getElementById(s + 'Section');
+                    if (el) el.style.display = s === section ? 'block' : 'none';
+                });
+            });
+        });
+
+        // Init tabs
+        initTabs('#myReportsSection');
+
+        // Load user info
+        const user = Auth.getUser();
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userRole').textContent = user.role || 'User';
+        }
+    </script>
+</body>
+
+</html>

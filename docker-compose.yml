@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # MySQL Database Instance
+  database:
+    image: mysql:8.0
+    container_name: lostfy_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: lostfy
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Express.js Core API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lostfy_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - JWT_SECRET=supersecretjwtsigningkey987654321
+      - JWT_REFRESH_SECRET=anotherrefreshsecretsigningkey123456789
+      - AI_SERVICE_URL=http://ai-service:8000
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/uploads
+
+  # FastAPI AI Prediction Microservice
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: lostfy_ai
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+      - PORT=8000
+      - HOST=0.0.0.0
+    volumes:
+      - uploads_data:/backend/uploads
+
+volumes:
+  db_data:
+  uploads_data:

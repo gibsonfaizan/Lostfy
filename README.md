@@ -1,0 +1,144 @@
+# LostFy — Production-Ready AI-Powered Lost & Found Platform
+
+LostFy is a modern, startup-ready Lost & Found ecosystem designed to connect lost keys, wallets, phones, documents, and other valuables back to their rightful owners. 
+
+By integrating state-of-the-art computer vision models (CLIP, YOLO, OCR) with high-confidence security checks (OTP verification, digital QR passes, location-based queries, and claim verifications), LostFy eliminates the typical chaos and insecurity of reclaiming lost property.
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    Client[Web Frontend: HTML/CSS/Vanilla JS] -- HTTP/REST -- API_Gateway[Node.js / Express Core Server]
+    API_Gateway -- SQL Query -- DB[(MySQL Database)]
+    API_Gateway -- Axios Call -- AIService[FastAPI AI Service]
+    
+    subgraph FastAPI ML Pipelines
+        AIService --> YOLO[YOLOv8 Object Detector]
+        AIService --> CLIP[CLIP Image Matching Engine]
+        AIService --> OCR[EasyOCR Text Extractor]
+        AIService --> Blur[Face & Sensitive Fields PI-Blur]
+        AIService --> FAISS[(FAISS Vector DB)]
+    end
+```
+
+### Flow of Match Verification:
+1. **Report Lost / Found**: Images uploaded via `Multer` are auto-routed to the AI service.
+2. **Pre-processing**: Faces and sensitive elements (phone numbers, card IDs) are dynamically blurred.
+3. **Feature Extraction**: YOLO tags the object class (e.g., iPhone, Card case); CLIP embeds the feature vector; EasyOCR parses text tags (serial keys, addresses).
+4. **Vector Match**: FAISS scans historical indices and matches based on category, visual cosine similarity, time, and coordinates.
+5. **Ownership Check**: High-match results trigger security verification. The claimer must answer items-specific questions, reaching a verified threshold before contacting the finder.
+
+---
+
+## 📂 Project Structure
+
+```
+LostFy/
+├── frontend/             # Single-page/Multi-page responsive frontend
+│   ├── css/              # HSL variables, glassmorphism layout, animations
+│   ├── js/               # Local auth state, map helpers, dynamic UI components
+│   ├── images/           # Brand assets, icons, backgrounds
+│   └── pages/            # Page templates: home, dashboard, admin, auth, report...
+│
+├── backend/              # Node.js Core Backend
+│   ├── config/           # Database Connection
+│   ├── controllers/      # MVC Controllers
+│   ├── models/           # MySQL Schema Queries & DB Models
+│   ├── routes/           # REST Endpoints
+│   ├── middleware/       # JWT validations, RBAC controls
+│   ├── services/         # Outer interfaces (notification, mailing, QR, OTP)
+│   ├── utils/            # Helper formats, validators
+│   └── uploads/          # Multer uploads directory (locally ignored)
+│
+├── ai-service/           # FastAPI Machine Learning Service
+│   ├── models/           # Base logic modules
+│   ├── routes/           # FastAPI endpoints
+│   ├── services/         # Core AI pipelines (YOLO, CLIP, easyOCR, Blur)
+│   ├── weights/          # YOLO models or download hooks
+│   └── utils/            # Image helper libraries & helpers
+│
+└── database/             # Raw SQL Database Scripts
+    ├── schema.sql        # Database tables construction
+    └── seed.sql          # Test seed accounts and records
+```
+
+---
+
+## 🧩 Complete Feature List
+
+1. **Aesthetics & UI**: Curated dark HSL theme, glassmorphic layout cards, animated loaders, timeline charts, and mobile/desktop responsive design.
+2. **Geographical Matches**: Spatial filtering maps that display reports within a configurable radius.
+3. **Safety Protection**: Auto-redaction of PII content on uploaded found images to protect details (serial tags, face details, ID card strings).
+4. **Weighted Claim Engine**: Claim confidence rating composed of location similarity, category tag matching, text parsing, verification checklist score, and trust metrics.
+5. **QR/OTP Verification**: Instant meeting handshakes. Finder scans the Claimer's secure OTP/QR to confirm handover and release item status.
+
+---
+
+## 🗄️ Normalized MySQL Database Plan
+
+The schema employs normalized entities with foreign constraints, indexes on geo-coordinates/categories, and cascaded updates.
+
+- **`users`**: Main user accounts with JWT validation tags and dynamic trust scoring metric.
+- **`items`**: Base report table containing:
+  - `type` (ENUM: `lost`, `found`)
+  - `category` (ENUM: `electronics`, `documents`, `wallets_bags`, `keys`, `accessories`, `others`)
+  - `location_lat`, `location_lng`, `location_text`
+  - `image_url` (cleaned) and raw description
+  - `ai_tags` (YOLO classes)
+  - `ocr_text` (parsed tokens)
+  - `status` (ENUM: `active`, `matching`, `claimed`, `closed`)
+- **`claims`**: Keeps history of claim requests, confidence scores, and verification status.
+- **`verification_questions`**: Creator-defined questions to verify claims (e.g. "What stickers are on the phone?").
+- **`claim_answers`**: Claimer responses to verify ownership.
+- **`ai_matches`**: Score logs generated by the CLIP/YOLO match processor.
+- **`meetings`**: Scheduled coordination logs for handovers, featuring status tags, notes, and QR handshake hash.
+- **`notifications`**: Real-time app notifications.
+
+---
+
+## 🌐 API Endpoint Specification
+
+### Auth Manager
+- `POST /api/auth/register` : Create active account.
+- `POST /api/auth/login` : Login user, receives Access & Refresh tokens.
+- `POST /api/auth/otp/send` / `/verify` : Verification OTP logic.
+
+### Items Manager
+- `POST /api/items` : Multi-part form for Lost/Found reports. Handles Multer uploads and fires AI-Service hooks.
+- `GET /api/items/search` : Filter listings with location radius, dates, categories, and query tags.
+- `GET /api/items/:id/matches` : Get top matching recommendations with score metrics.
+
+### Verification Claim Manager
+- `POST /api/claims` : Create request to claim a found item.
+- `GET /api/claims/:id/questions` : Fetch verification questions.
+- `POST /api/claims/:id/submit` : Submits answers for analysis. Returns match percentage.
+- `POST /api/claims/:id/handshake` : Finder scans claimer's code to release item.
+
+---
+
+## 🧠 AI Workflow Engine
+
+1. Image is sent to `ai-service/routes/ai_routes.py`.
+2. **Sensitive Eraser**:
+   - Haar Cascade or MobileNet locates faces: blurs bounding box.
+   - Text boxes with PAN, card serials, cell details are masked using OpenCV overlay.
+3. **Aesthetic Tag Classifier**:
+   - YOLOv8 outputs bounding boxes, mapping items (e.g. `Laptop`, `Wallet`).
+4. **Vector Matcher**:
+   - CLIP embeds the cropped object vector.
+   - FAISS compares cosine distance to index: returns top matches.
+5. **Confidence Evaluator**:
+   - Visual Similarity Score (70% weight) + Class similarity (y/n) + OCR match (10% weight) + Metadata coincidence (Time & Location weight).
+   - Flag suspect duplicates and fake claims based on confidence scoring.
+
+---
+
+## 🚀 Development Roadmap
+
+* **Phase 1: Architecture & Project Plan (Agent 1) — CURRENT**
+* **Phase 2: Modern responsive UI creation (Agent 2)**
+* **Phase 3: MVC Backend, APIs, Auth & SQL interface (Agent 3)**
+* **Phase 4: FastAPI AI Engine (CLIP, YOLO, Blur, FAISS) (Agent 4)**
+* **Phase 5: Dockerization, Nginx, Caching, PM2 & End-to-End verification (Agent 5)**

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Verify your ownership of a lost item through LostFy's secure claim verification process.">
+    <title>Claim Verification — LostFy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+        <div class="container" style="max-width:800px;">
+            <h2 class="fade-in">✅ Claim Verification</h2>
+            <p class="fade-in" style="margin-bottom:32px;">Answer the owner's verification questions to prove ownership.
+                Your trust score and responses determine eligibility.</p>
+
+            <!-- Trust Score Card -->
+            <div class="trust-card glass fade-in" style="margin-bottom:32px;">
+                <div class="score-ring">
+                    <svg width="120" height="120">
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="8" />
+                        <circle cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8"
+                            stroke-dasharray="326.7" stroke-dashoffset="24.5" id="trustCircle" stroke-linecap="round" />
+                    </svg>
+                    <span class="score-value text-gradient" id="trustValue">92.5</span>
+                </div>
+                <div class="trust-details">
+                    <h3>Your Trust Score</h3>
+                    <p style="font-size:0.85rem;">Based on your account age, previous claims, and verification history.
+                    </p>
+                    <div class="trust-bar" style="margin-top:12px;">
+                        <div class="trust-bar-fill" style="width:92.5%;"></div>
+                    </div>
+                    <div
+                        style="display:flex;justify-content:space-between;font-size:0.75rem;margin-top:4px;color:var(--text-secondary);">
+                        <span>Low Trust</span><span>High Trust</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Timeline -->
+            <div class="card fade-in" style="padding:28px;margin-bottom:32px;">
+                <h3 style="margin-bottom:20px;">📋 Verification Process</h3>
+                <div class="timeline">
+                    <div class="timeline-item completed">
+                        <h4>Claim Submitted</h4>
+                        <p>You initiated a claim for "iPhone 15 Pro Max"</p>
+                        <div class="timeline-date">Jul 4, 2026 — 10:30 AM</div>
+                    </div>
+                    <div class="timeline-item completed">
+                        <h4>AI Match Verified</h4>
+                        <p>CLIP visual match: 87% | Category: Electronics ✓</p>
+                        <div class="timeline-date">Jul 4, 2026 — 10:31 AM</div>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Ownership Questions</h4>
+                        <p>Answer the finder's verification questions below</p>
+                        <div class="timeline-date">In progress...</div>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Final Review & Handover</h4>
+                        <p>QR/OTP verification and secure meeting setup</p>
+                        <div class="timeline-date">Pending</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Questions Form -->
+            <div class="card fade-in" style="padding:28px;margin-bottom:32px;">
+                <h3 style="margin-bottom:20px;">❓ Verification Questions</h3>
+                <form id="verifyForm" onsubmit="handleVerifySubmit(event)">
+                    <div class="form-group">
+                        <label>1. What stickers or markings are on the phone case?</label>
+                        <textarea class="form-control verify-answer"
+                            placeholder="Describe specific stickers, marks, or modifications..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>2. What is the phone's wallpaper?</label>
+                        <textarea class="form-control verify-answer"
+                            placeholder="Describe the lock screen or home screen image..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>3. What brand and color is the charging cable that was with it?</label>
+                        <textarea class="form-control verify-answer" placeholder="Describe cable type, color, length..."
+                            required></textarea>
+                    </div>
+
+                    <!-- Upload proof (optional) -->
+                    <div class="form-group">
+                        <label>Upload Proof of Ownership (optional)</label>
+                        <div class="upload-area">
+                            <div class="upload-icon">📎</div>
+                            <p>Upload receipt, purchase screenshot, or IMEI proof</p>
+                            <input type="file" id="proofInput" accept="image/*,.pdf">
+                        </div>
+                        <div class="upload-preview" id="proofPreview"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Submit Verification →</button>
+                </form>
+            </div>
+
+            <!-- QR Handover Section (shown after verification) -->
+            <div class="card fade-in" style="padding:28px;display:none;" id="qrSection">
+                <h3 style="text-align:center;margin-bottom:16px;">🔐 QR Handover Code</h3>
+                <p style="text-align:center;margin-bottom:16px;">Show this QR code to the finder when you meet. They
+                    will scan it to confirm the handover.</p>
+                <div class="qr-box" id="qrBox">
+                    <div style="text-align:center;">
+                        <div style="font-size:4rem;">📱</div>
+                        <p style="font-size:0.8rem;margin-top:8px;color:var(--text-secondary);">QR Code Generated</p>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:16px;">
+                    <p style="font-size:0.9rem;">OTP: <strong
+                            style="font-size:1.2rem;letter-spacing:4px;color:var(--primary);"
+                            id="handoverOtp">847291</strong></p>
+                    <p style="font-size:0.75rem;color:var(--text-secondary);margin-top:4px;">Share this OTP only at the
+                        meeting point</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/app.js"></script>
+    <script>
+        initUploadPreview('proofInput', 'proofPreview');
+
+        async function handleVerifySubmit(e) {
+            e.preventDefault();
+            const answers = Array.from(document.querySelectorAll('.verify-answer')).map(t => t.value);
+            if (answers.some(a => !a.trim())) { Toast.show('Please answer all questions', 'warning'); return; }
+            Toast.show('Analyzing your answers...', 'info');
+            // Simulate AI analysis
+            setTimeout(() => {
+                Toast.show('Verification score: 89% — Claim approved!', 'success');
+                document.getElementById('qrSection').style.display = 'block';
+                document.getElementById('qrSection').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

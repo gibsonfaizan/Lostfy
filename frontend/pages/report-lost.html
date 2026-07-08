@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Report a lost item on LostFy. Upload photos, describe the item, and let AI help find it.">
+    <title>Report Lost Item — LostFy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+
+<body>
+    <div class="blob-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <section class="section" style="padding-top:calc(var(--nav-h) + 40px);">
+        <div class="container" style="max-width:720px;">
+            <div class="glass fade-in" style="padding:40px;">
+                <h2>📢 Report Lost Item</h2>
+                <p style="margin-bottom:32px;">Provide as much detail as possible. AI will automatically tag and match
+                    your item.</p>
+
+                <form id="lostForm" onsubmit="handleLostSubmit(event)">
+                    <!-- Title -->
+                    <div class="form-group">
+                        <label for="itemTitle">Item Title *</label>
+                        <input type="text" id="itemTitle" class="form-control"
+                            placeholder="e.g. iPhone 15 Pro Max in black case" required>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="itemCategory">Category *</label>
+                        <select id="itemCategory" class="form-control" required>
+                            <option value="">Select category</option>
+                            <option value="electronics">📱 Electronics</option>
+                            <option value="documents">📄 Documents</option>
+                            <option value="wallets_bags">👜 Wallets & Bags</option>
+                            <option value="keys">🔑 Keys</option>
+                            <option value="accessories">⌚ Accessories</option>
+                            <option value="others">📦 Others</option>
+                        </select>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label for="itemDesc">Description *</label>
+                        <textarea id="itemDesc" class="form-control"
+                            placeholder="Describe color, brand, distinguishing marks, stickers, damage, etc."
+                            required></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="form-group">
+                        <label>Upload Photos (max 5)</label>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">📷</div>
+                            <p>Click or drag photos here</p>
+                            <p style="font-size:0.8rem;">JPG, PNG — Max 5MB each</p>
+                            <input type="file" id="imageInput" accept="image/*" multiple>
+                        </div>
+                        <div class="upload-preview" id="imagePreview"></div>
+                    </div>
+
+                    <!-- Location -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div class="form-group">
+                            <label for="locLat">Latitude *</label>
+                            <input type="number" step="any" id="locLat" class="form-control" placeholder="28.6139"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="locLng">Longitude *</label>
+                            <input type="number" step="any" id="locLng" class="form-control" placeholder="77.2090"
+                                required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="locText">Location Description</label>
+                        <input type="text" id="locText" class="form-control"
+                            placeholder="e.g. Near Central Park Gate 2, Delhi">
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary" style="margin-bottom:20px;"
+                        onclick="getMyLocation()">📍 Use My Location</button>
+
+                    <!-- Map Preview -->
+                    <div class="map-container" style="height:250px;margin-bottom:24px;" id="mapContainer">
+                        <div class="map-overlay" id="mapOverlay">
+                            <span>📍 Map preview — enter coordinates above</span>
+                        </div>
+                    </div>
+
+                    <!-- Date Lost -->
+                    <div class="form-group">
+                        <label for="dateLost">Date & Time Lost</label>
+                        <input type="datetime-local" id="dateLost" class="form-control">
+                    </div>
+
+                    <!-- Verification Questions -->
+                    <div class="form-group">
+                        <label>Verification Questions (help prove ownership)</label>
+                        <div id="questionsContainer">
+                            <div style="display:flex;gap:8px;margin-bottom:8px;">
+                                <input type="text" class="form-control question-input"
+                                    placeholder="e.g. What sticker is on the back?">
+                                <button type="button" class="btn btn-sm btn-danger"
+                                    onclick="this.parentElement.remove()">✕</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="addQuestion()">+ Add
+                            Question</button>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;">Submit Report
+                        →</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/app.js"></script>
+    <script>
+        // Init image upload preview
+        initUploadPreview('imageInput', 'imagePreview');
+
+        // Geolocation
+        function getMyLocation() {
+            if (!navigator.geolocation) { Toast.show('Geolocation not supported', 'warning'); return; }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    document.getElementById('locLat').value = pos.coords.latitude.toFixed(6);
+                    document.getElementById('locLng').value = pos.coords.longitude.toFixed(6);
+                    updateMapPreview();
+                    Toast.show('Location captured!', 'success');
+                },
+                () => Toast.show('Unable to get location', 'error')
+            );
+        }
+
+        // Map preview update on coordinate entry
+        ['locLat', 'locLng'].forEach(id => {
+            document.getElementById(id).addEventListener('change', updateMapPreview);
+        });
+
+        function updateMapPreview() {
+            const lat = document.getElementById('locLat').value;
+            const lng = document.getElementById('locLng').value;
+            if (lat && lng) {
+                const container = document.getElementById('mapContainer');
+                container.innerHTML = `<iframe src="https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01},${lat - 0.01},${parseFloat(lng) + 0.01},${parseFloat(lat) + 0.01}&layer=mapnik&marker=${lat},${lng}" allowfullscreen></iframe>`;
+            }
+        }
+
+        // Add verification question
+        function addQuestion() {
+            const container = document.getElementById('questionsContainer');
+            if (container.children.length >= 5) { Toast.show('Max 5 questions', 'warning'); return; }
+            const div = document.createElement('div');
+            div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;';
+            div.innerHTML = `
+        <input type="text" class="form-control question-input" placeholder="Enter a verification question">
+        <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()">✕</button>
+      `;
+            container.appendChild(div);
+        }
+
+        // Submit handler
+        async function handleLostSubmit(e) {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('type', 'lost');
+            formData.append('title', document.getElementById('itemTitle').value);
+            formData.append('category', document.getElementById('itemCategory').value);
+            formData.append('description', document.getElementById('itemDesc').value);
+            formData.append('location_lat', document.getElementById('locLat').value);
+            formData.append('location_lng', document.getElementById('locLng').value);
+            formData.append('location_text', document.getElementById('locText').value);
+            formData.append('date_lost', document.getElementById('dateLost').value);
+
+            // Questions
+            const questions = Array.from(document.querySelectorAll('.question-input'))
+                .map(i => i.value).filter(v => v.trim());
+            formData.append('questions', JSON.stringify(questions));
+
+            Toast.show('Report submitted! AI is processing your item...', 'success');
+            setTimeout(() => window.location.href = 'dashboard.html', 1500);
+        }
+    </script>
+</body>
+
+</html>
