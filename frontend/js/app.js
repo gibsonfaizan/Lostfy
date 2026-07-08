@@ -209,14 +209,14 @@ function renderFooter() {
           <a href="#">Contact</a>
         </div>
 
-        <div class="footer-col">
+<div class="footer-bottom">
+    &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
+</div>
+
+<div class="footer-col">
     <h4>Connect</h4>
 
-    <a href="https://@gibsonfaizan" target="_blank">Twitter</a>
-
     <a href="https://github.com/gibsonfaizan" target="_blank">GitHub</a>
-
-    <a href="https://www.linkedin.com/in/YOUR_USERNAME" target="_blank">LinkedIn</a>
 
     <a href="mailto:gibsonfaizan@gmail.com">
         gibsonfaizan@gmail.com
@@ -225,12 +225,16 @@ function renderFooter() {
     <a href="tel:+919570953308">
         📞 +91 9570953308
     </a>
+</div>
 
-      <div class="footer-bottom">
-        &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
-      </div>
-    </div>
-  `;
+</div>
+
+<div class="footer-bottom">
+    &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
+</div>
+
+</div>
+`;
   document.body.appendChild(footer);
 }
 
