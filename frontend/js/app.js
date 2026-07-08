@@ -228,7 +228,7 @@ function renderFooter() {
 </div>
 
 <div class="footer-bottom">
-    &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
+    LostFy. Designed & Developed by Faizan Ahmad.
 </div>
 
 </div>
