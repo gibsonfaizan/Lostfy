@@ -208,16 +208,26 @@ function renderFooter() {
           <a href="#">Terms of Service</a>
           <a href="#">Contact</a>
         </div>
+
         <div class="footer-col">
-          <h4>Connect</h4>
-          <a href="#">Twitter</a>
-          <a href="#">GitHub</a>
-          <a href="#">LinkedIn</a>
-          <a href="#">support@lostfy.io</a>
-        </div>
-      </div>
+    <h4>Connect</h4>
+
+    <a href="https://@gibsonfaizan" target="_blank">Twitter</a>
+
+    <a href="https://github.com/gibsonfaizan" target="_blank">GitHub</a>
+
+    <a href="https://www.linkedin.com/in/YOUR_USERNAME" target="_blank">LinkedIn</a>
+
+    <a href="mailto:gibsonfaizan@gmail.com">
+        gibsonfaizan@gmail.com
+    </a>
+
+    <a href="tel:+919570953308">
+        📞 +91 9570953308
+    </a>
+
       <div class="footer-bottom">
-        &copy; ${new Date().getFullYear()} LostFy. Built with ❤️ for the community.
+        &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
       </div>
     </div>
   `;
