@@ -209,9 +209,7 @@ function renderFooter() {
           <a href="#">Contact</a>
         </div>
 
-<div class="footer-bottom">
-    &copy; ${new Date().getFullYear()} LostFy. Designed & Developed by Faizan Ahmad.
-</div>
+
 
 <div class="footer-col">
     <h4>Connect</h4>
